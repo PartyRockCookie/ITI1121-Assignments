@@ -1,0 +1,105 @@
+import java.util.NoSuchElementException;
+
+public class Dictionary implements Map<String, Token> {
+
+	private static class Pair { // The elements of this array are of type Pair,
+								// a private static nested class. A Pair object
+								// stores an association, a key and a value, of
+								// type String and Token, respectively.
+		private String key;
+		private Token value;
+
+		private Pair(String key, Token value) {
+			this.key = key;
+			this.value = value;
+		}
+	}
+
+	private Pair[] associations;
+	private int size;
+
+	public Dictionary() {
+		associations = new Pair[10];
+		size = 0;
+	}
+
+	public Token get(String key) {
+		// returns the left most value associated with this specified key.
+		// The methods throws java.util.NoSuchElementException if the element
+		// being requested does not exist. It throws NullPointerException if the
+		// specified key is null.
+		if (key == null) {
+			throw new NullPointerException();
+		} else
+			for (int i = size - 1; i >= 0; i--) {
+				if (key.equals(associations[i].key)) { // if (String)key ==
+														// (String)(associations[i].key))?
+					return associations[i].value;
+				}
+			}
+		throw new NoSuchElementException();
+	}
+
+	public boolean contains(String key) {
+
+		if (key == null) {
+			throw new NullPointerException();
+		}
+
+		else
+			for (int i = 0; i < size; i++) {
+				if (key.equals(associations[i].key)) {
+					return true;
+				}
+			}
+		return false;
+	}
+
+	public void put(String key, Token value) { // implement dynamic array here
+		if (key == null || value == null) {
+			throw new NullPointerException();
+		}
+
+		if (size == associations.length) {
+			Pair[] temp = new Pair[associations.length + 5];
+			for (int i = 0; i < associations.length; i++) {
+				temp[i] = associations[i];
+			}
+			associations = temp;
+		}
+
+		Pair associationArray = new Pair(key, value);
+		associations[size] = associationArray;
+		size++;
+	}
+
+	public void replace(String key, Token value) {
+		if (key == null || value == null) {
+			throw new NullPointerException();
+		}
+		for (int i = size - 1; i >= 0; i--) {
+			if (key.equals(associations[i].key)) {
+				associations[i].value = value;
+				return;
+			}
+		}
+		throw new NoSuchElementException();
+	}
+
+	public Token remove(String key) {
+		if (key == null) {
+			throw new NullPointerException();
+		}
+		Token temp = null;
+		int i = 0;
+		for (i = size - 1; i >= 0; i--) {
+			if (key.equals(associations[i].key)) {
+				temp = associations[i].value;
+				associations[i] = null;
+				break;
+			}
+		}
+		throw new NoSuchElementException();
+
+	}
+}
